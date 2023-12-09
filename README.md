@@ -57,20 +57,37 @@ $ docker-compose run web ./manage.py createsuperuser
 ## Запускаем сайт
 
 Переходим в каталог сайта:
+
 `cd k8s-test-django\backend_main_django`
+
 Создаём образ Django-приложения в minikube:
+
 `minikube image build -t django-app .`
+
 Создаем configMap в minikube:
+
 `kubectl create configmap django-cm --from-env-file=.env`
+
 Запускаем сайт в kubernetes:
+
 `kubectl apply -f django-app.yaml`
+
 Чтобы получить доступ к сайту необходимо включить ingress:
+
 `minikube addons enable ingress`
+
 Проверить работу сайта без домена можно следующим образом:
+
 `minikube ip`
+
 Добавить следующую строчку в hosts (etc/hosts - Linux, c:\Windows\system32\drivers\etc\hosts):
+
 `"minikube ip" star-burger.info`
+
 Чтобы примернить миграции создаем следующию задачу(job):
+
 `kubectl apply -f django-migrate.yaml`
+
 Для автоматического удаления сессий используем сделующую запланированную задчу (cronjob):
+
 `kubectl apply -f clear-sessions-cronjob.yaml`

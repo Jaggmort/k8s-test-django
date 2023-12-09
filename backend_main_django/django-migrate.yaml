@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrate
+  labels:
+    name: django-migrate
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 100
+  ttlSecondsAfterFinished: 10
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: django-migrate
+          image: django_app:latest
+          imagePullPolicy: Never
+          command:
+            - python
+            - manage.py
+            - migrate
+            - --noinput
+          envFrom:
+          - secretRef:
+              name: django-secret

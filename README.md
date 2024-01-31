@@ -86,6 +86,8 @@ $ docker-compose run web ./manage.py createsuperuser
 
 `"minikube ip" star-burger.info`
 
+Зайти на сайт по адресу: `star-burger.info`
+
 Чтобы примернить миграции создаем следующию задачу(job):
 
 `kubectl apply -f django-migrate.yaml`

@@ -54,7 +54,7 @@ $ docker-compose run web ./manage.py createsuperuser
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
-## Запускаем сайт
+## Запускаем сайт в Kubernetes
 
 Переходим в каталог сайта:
 
@@ -71,10 +71,12 @@ $ docker-compose run web ./manage.py createsuperuser
 Запускаем сайт в kubernetes:
 
 `kubectl apply -f django-app.yaml`
+`kubectl apply -f django-app-balancer.yaml`
 
 Чтобы получить доступ к сайту необходимо включить ingress:
 
 `minikube addons enable ingress`
+`kubectl apply -f django-app-ingress.yaml`
 
 Проверить работу сайта без домена можно следующим образом:
 

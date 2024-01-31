@@ -70,7 +70,10 @@ $ docker-compose run web ./manage.py createsuperuser
 
 Запускаем сайт в kubernetes:
 
+`cd k8s-test-django\kuber`
+
 `kubectl apply -f django-app.yaml`
+
 `kubectl apply -f django-app-balancer.yaml`
 
 Чтобы получить доступ к сайту необходимо включить ingress:

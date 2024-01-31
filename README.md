@@ -79,6 +79,7 @@ $ docker-compose run web ./manage.py createsuperuser
 Чтобы получить доступ к сайту необходимо включить ingress:
 
 `minikube addons enable ingress`
+
 `kubectl apply -f django-app-ingress.yaml`
 
 Проверить работу сайта без домена можно следующим образом:

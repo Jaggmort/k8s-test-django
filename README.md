@@ -44,13 +44,21 @@ $ docker-compose run web ./manage.py createsuperuser
 
 ## Переменные окружения
 
-Для работы будем испольовать .env файл для создания configmap.
+Для работы необходимо будет создать файл `secret.yaml` с следующим содержимым:
 
+`
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-app-secret
+type: Opaque
+stringData:
+    SECRET_KEY: "Тут введите SECRET_KEY"
+    DATABASE_URL: "Введите DATABASE_URL"
+`
+
+Где переменные должны быть введены закодированными в формате base64:
 `SECRET_KEY` -- обязательная секретная настройка Django. Это соль для генерации хэшей. Значение может быть любым, важно лишь, чтобы оно никому не было известно. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#secret-key).
-
-`DEBUG` -- настройка Django для включения отладочного режима. Принимает значения `TRUE` или `FALSE`. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-DEBUG).
-
-`ALLOWED_HOSTS` -- настройка Django со списком разрешённых адресов. Если запрос прилетит на другой адрес, то сайт ответит ошибкой 400. Можно перечислить несколько адресов через запятую, например `127.0.0.1,192.168.0.1,site.test`. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts).
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
@@ -64,9 +72,9 @@ $ docker-compose run web ./manage.py createsuperuser
 
 `minikube image build -t django-app .`
 
-Создаем configMap в minikube:
+Применяем secret.yaml:
 
-`kubectl create configmap django-cm --from-env-file=.env`
+`kubectl apply -f secret.yaml`
 
 Запускаем сайт в kubernetes:
 

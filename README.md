@@ -65,6 +65,10 @@ stringData:
 
 ## Запускаем сайт в Kubernetes
 
+Устанавливаем PostgreSQL:
+
+`sudo apt install postgresql postgresql-contrib`
+
 Переходим в каталог сайта:
 
 `cd k8s-test-django\backend_main_django`

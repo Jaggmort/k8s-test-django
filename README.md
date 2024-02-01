@@ -47,14 +47,14 @@ $ docker-compose run web ./manage.py createsuperuser
 Для работы необходимо будет создать файл `secret.yaml` с следующим содержимым:
 
 `
-apiVersion: v1
-kind: Secret
-metadata:
-  name: django-app-secret
-type: Opaque
-stringData:
-    SECRET_KEY: "Тут введите SECRET_KEY"
-    DATABASE_URL: "Введите DATABASE_URL"
+apiVersion: v1  
+kind: Secret  
+metadata:  
+  name: django-app-secret  
+type: Opaque  
+stringData:  
+    SECRET_KEY: "Тут введите SECRET_KEY"  
+    DATABASE_URL: "Введите DATABASE_URL"  
 `
 
 Где переменные должны быть введены закодированными в формате base64:

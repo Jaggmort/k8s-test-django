@@ -21,4 +21,6 @@ spec:
           imagePullPolicy: Never
           envFrom:
           - configMapRef:
-              name: django-cm
+              name: django-app-config
+          - secretRef:
+              name: django-app-secret              

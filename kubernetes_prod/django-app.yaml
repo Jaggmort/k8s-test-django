@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deploy
+  namespace: edu-happy-goldberg
+  labels:
+    app: django-deploy
+spec:
+  selector:
+    matchLabels:
+      app: django-deploy
+  template:
+    metadata:
+      labels:
+        app: django-deploy
+    spec:
+      containers:
+        - name: django-app
+          image: nginx:1.14.2
+          ports:
+          - containerPort: 80
+          imagePullPolicy: Never
+          envFrom:
+          - configMapRef:
+              name: django-app-config
+          - secretRef:
+              name: django-app-secret              

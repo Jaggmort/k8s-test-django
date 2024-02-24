@@ -128,4 +128,5 @@ stringData:
 11. Примините миграции `kubectl -n <namespace> apply -f migrate.yaml`
 12. Запустите cronjob для очистки сессий `kubectl -n <namespace> apply -f clearsessions.yaml`
 13. Создайте суперпользователя используя `kubectl exec -it <django-deploy-pod-name> -- python manage.py createsuperuser` или с помощью [Lens](https://k8slens.dev/) выбрав интересуюий под, запустив его оболочку и выполнив команду `python manage.py createsuperuser`
+
     Сайт доступен по [ссылке](https://edu-happy-goldberg.sirius-k8s.dvmn.org/)

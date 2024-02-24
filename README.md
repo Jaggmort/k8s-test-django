@@ -63,7 +63,7 @@ stringData:
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
-## Запускаем сайт в Kubernetes
+# Запускаем сайт в Kubernetes
 
 Устанавливаем PostgreSQL:
 
@@ -112,3 +112,20 @@ stringData:
 Для автоматического удаления сессий используем сделующую запланированную задчу (cronjob):
 
 `kubectl apply -f clear-sessions-cronjob.yaml`
+
+# Запуск сайта в Yandex Cloud
+
+1. Воспользуйтесь [инструкцией](https://cloud.yandex.com/en/docs/cli/quickstart), чтобы установить CLI.
+2. Авторизируйтесь с помощью команды `yc init`
+3. Зарегистрируйтесь на [DockerHub](https://hub.docker.com/)
+4. Создайтие образ `docker build -t <hub-username>/<image-name>:<tag> `
+5. Загрузите образ на DockerHub `docker push <hub-username>/<image-name>:<tag>`
+6. Заполните актуальные данные и добавьте в namespace config-file `kubectl -n <namespace> apply -f configmap.yaml`
+7. Получите сертификат: [Инструкция, пункт "Получение SSL-сертификата"](https://cloud.yandex.ru/ru/docs/managed-postgresql/operations/connect)
+8. Создайте Secret используя полученный сертификат `kubectl create secret generic django-s -n <namespace> --from-file=/<path_to>/root.crt`, где path_to - путь к сертификату, его можно увидеть в инструкции из п.7
+9. Запустите деплой: `kubectl -n <namespace> apply -f deployment.yaml`
+10. Заполните service.yaml актуальными данныеи(ALB-роутер) и запустите его `kubectl -n <namespace> apply -f service.yaml`
+11. Примините миграции `kubectl -n <namespace> apply -f migrate.yaml`
+12. Запустите cronjob для очистки сессий `kubectl -n <namespace> apply -f clearsessions.yaml`
+13. Создайте суперпользователя используя `kubectl exec -it <django-deploy-pod-name> -- python manage.py createsuperuser` или с помощью [Lens](https://k8slens.dev/) выбрав интересуюий под, запустив его оболочку и выполнив команду `python manage.py createsuperuser`
+    Сайт доступен по [ссылке](https://edu-happy-goldberg.sirius-k8s.dvmn.org/)

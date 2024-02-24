@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+  namespace: edu-happy-goldberg
+  labels:
+    app: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: django
+          image: djeedo/django-app:38b367a
+          envFrom:
+            - configMapRef:
+                name: django-cm
+            - secretRef:
+                name: django-s              
+          volumeMounts:
+            - mountPath: /opt/psql
+              name: psql-cert
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: url
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: secret-key
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: debug
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: allowed-hosts
+          imagePullPolicy: Always
+      volumes:
+        - name: psql-cert
+          secret:
+            secretName: django-s

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: django-cm
+  namespace: edu-happy-goldberg
+  labels:
+    app: django-app
+data:
+  debug: 'True'
+  allowed-hosts: 'enter ur host'
+  secret-key: 'enter ur secret key'

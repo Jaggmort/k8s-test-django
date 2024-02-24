@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrate
+  namespace: edu-happy-goldberg
+  labels:
+    name: django-migrate
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 100
+  ttlSecondsAfterFinished: 10
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: django-migrate
+          image: djeedo/django-app:38b367a
+          imagePullPolicy: IfNotPresent
+          command:
+            - python
+            - manage.py
+            - migrate
+            - --noinput
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: url
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: secret-key
+            - name: DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: debug
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: django-cm
+                  key: allowed-hosts
